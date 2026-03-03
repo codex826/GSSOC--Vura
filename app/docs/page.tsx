@@ -6,7 +6,7 @@ import {
     ShieldCheck, Copy, Check, Terminal, Globe, AlertTriangle,
     CheckCircle2, XCircle, ArrowRight, Code2, Zap
 } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, type Variants } from "framer-motion"
 
 // ---------- Code snippets ----------
 const snippets = {
@@ -215,7 +215,7 @@ export default function DocsPage() {
     const [activeTab, setActiveTab] = useState<keyof typeof snippets>("curl")
     const [activeStatus, setActiveStatus] = useState(0)
 
-    const fadeUp = {
+    const fadeUp: Variants = {
         hidden: { opacity: 0, y: 24 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
     }
@@ -303,8 +303,8 @@ export default function DocsPage() {
                                     key={lang}
                                     onClick={() => setActiveTab(lang)}
                                     className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${activeTab === lang
-                                            ? "bg-[var(--color-neon-primary)] text-black"
-                                            : "text-[var(--color-neon-muted)] hover:text-white"
+                                        ? "bg-[var(--color-neon-primary)] text-black"
+                                        : "text-[var(--color-neon-muted)] hover:text-white"
                                         }`}
                                 >
                                     {lang === "js" ? "JavaScript" : lang === "python" ? "Python" : "cURL"}
@@ -338,8 +338,8 @@ export default function DocsPage() {
                                 key={s.code}
                                 onClick={() => setActiveStatus(i)}
                                 className={`flex items-center gap-3 px-5 py-4 rounded-xl border text-left transition-all ${activeStatus === i
-                                        ? `${s.bg} ${s.border} border`
-                                        : "bg-[#0a0a0a] border-[var(--color-neon-border)] hover:border-white/20"
+                                    ? `${s.bg} ${s.border} border`
+                                    : "bg-[#0a0a0a] border-[var(--color-neon-border)] hover:border-white/20"
                                     }`}
                             >
                                 {s.icon}
