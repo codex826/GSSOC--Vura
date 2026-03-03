@@ -41,26 +41,32 @@ export async function POST(req: NextRequest) {
 
         // 2. Parse Excel dataset
         const workbook = xlsx.read(datasetBuffer, { type: "buffer" });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        // Cast to expected type
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const rows = xlsx.utils.sheet_to_json<any>(sheet);
-
-        if (rows.length === 0) {
-            return NextResponse.json({ error: "The provided Excel file is empty." }, { status: 400 });
-        }
-
-        // 3. Process each row
         const normalizeKey = (key: string) => key.trim().toLowerCase();
 
-        // Validate if necessary columns exist in the first row case-insensitively
-        const firstRow = rows[0];
-        const normalizedKeys = Object.keys(firstRow).map(normalizeKey);
+        // 3. Find the valid sheet
+        let rows: any[] = [];
+        let firstRow: any = null;
 
-        if (!normalizedKeys.includes('name') || !normalizedKeys.includes('course') || !normalizedKeys.includes('issuedate')) {
-            return NextResponse.json({ error: "Excel must contain 'name', 'course', and 'issueDate' columns." }, { status: 400 });
+        for (const sheetName of workbook.SheetNames) {
+            const sheet = workbook.Sheets[sheetName];
+            const sheetRows = xlsx.utils.sheet_to_json<any>(sheet);
+            if (sheetRows.length > 0) {
+                const potentialFirstRow = sheetRows[0];
+                const normalizedKeys = Object.keys(potentialFirstRow).map(normalizeKey);
+
+                if (normalizedKeys.includes('name') && normalizedKeys.includes('course') && normalizedKeys.includes('issuedate')) {
+                    rows = sheetRows;
+                    firstRow = potentialFirstRow;
+                    break;
+                }
+            }
         }
+
+        if (rows.length === 0) {
+            return NextResponse.json({ error: "No sheet containing 'name', 'course', and 'issueDate' columns was found." }, { status: 400 });
+        }
+
+        // 4. Process each row
 
         // Extract settings payload
         const settingsString = formData.get("settings") as string | null;

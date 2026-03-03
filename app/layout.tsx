@@ -26,12 +26,21 @@ export const metadata: Metadata = {
     title: 'Vura - Bulk Certificate Generation Platform',
     description: 'Upload an Excel sheet, drop your PDF template, and Vura bulk-generates verifiable certificates in seconds.',
     siteName: 'Vura',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Vura - Automate Certificate Generation at Scale',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Vura - Bulk Certificate Generation Platform',
     description: 'Automate Certificate Generation at Scale. Create, distribute, and verify certificates with ease.',
     creator: '@mr_codex',
+    images: ['/og-image.png'],
   },
 }
 
