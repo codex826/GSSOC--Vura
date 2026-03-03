@@ -3,6 +3,16 @@ import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+async function logUsage(userId: string | null | undefined, statusCode: number, certificateId?: string) {
+    if (!userId) return;
+    try {
+        await prisma.apiUsageLog.create({
+            data: { userId, endpoint: "verify", statusCode, certificateId: certificateId ?? null },
+        });
+    } catch { /* non-critical */ }
+}
+
+
 // Allow any origin so external agents (OpenClaw, Telegram bots, etc.) can call this endpoint
 export async function GET(req: NextRequest) {
     // Extract the certificate ID from the URL path directly —
@@ -40,8 +50,15 @@ export async function GET(req: NextRequest) {
             );
         }
 
+        // Look up owner for logging
+        const fullCert = await prisma.certificate.findUnique({
+            where: { certificateId: id.trim().toUpperCase() },
+            select: { userId: true },
+        });
+
         // 403 — certificate has been revoked
         if (certificate.revoked) {
+            void logUsage(fullCert?.userId, 403, certificate.certificateId);
             return NextResponse.json(
                 { error: "This certificate has been revoked by the issuer." },
                 { status: 403, headers: corsHeaders() }
@@ -49,6 +66,7 @@ export async function GET(req: NextRequest) {
         }
 
         // 200 — valid certificate
+        void logUsage(fullCert?.userId, 200, certificate.certificateId);
         return NextResponse.json(
             {
                 verified: true,

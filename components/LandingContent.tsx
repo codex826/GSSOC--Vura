@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link'
-import { ArrowRight, Database, ShieldCheck, Zap, Cloud, LayoutDashboard, CheckCircle, ChevronRight, Github, Twitter, Linkedin, Mail, User, LogOut, Search, Menu, X } from 'lucide-react'
+import { ArrowRight, Database, ShieldCheck, Zap, Cloud, LayoutDashboard, CheckCircle, ChevronRight, Github, Twitter, Linkedin, Mail, User, LogOut, Search, Menu, X, Key, Activity } from 'lucide-react'
 import { motion, useScroll, useTransform, AnimatePresence, Variants } from "framer-motion"
 import { useEffect, useState, useRef } from 'react'
 import { cn } from "@/lib/utils"
@@ -99,9 +99,6 @@ export default function LandingContent({ session }: { session: any }) {
 
                         {session ? (
                             <div className="flex items-center gap-3">
-                                <Link href="/dashboard" className="btn-secondary py-2 px-4 flex items-center gap-2 text-sm">
-                                    <LayoutDashboard className="w-4 h-4" /> Dashboard
-                                </Link>
                                 <div className="relative" ref={profileRef}>
                                     <button
                                         onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -127,7 +124,29 @@ export default function LandingContent({ session }: { session: any }) {
                                                     <p className="text-sm font-medium text-white truncate">{session.user?.name || "User"}</p>
                                                     <p className="text-xs text-[var(--color-neon-muted)] truncate mt-0.5">{session.user?.email}</p>
                                                 </div>
-                                                <div className="p-2">
+                                                <div className="p-2 space-y-0.5">
+                                                    <Link
+                                                        href="/dashboard"
+                                                        onClick={() => setIsProfileOpen(false)}
+                                                        className="w-full text-left px-3 py-2 text-sm text-[var(--color-neon-muted)] hover:text-white hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors"
+                                                    >
+                                                        <LayoutDashboard className="w-4 h-4" /> Dashboard
+                                                    </Link>
+                                                    <Link
+                                                        href="/dashboard/api-key"
+                                                        onClick={() => setIsProfileOpen(false)}
+                                                        className="w-full text-left px-3 py-2 text-sm text-[var(--color-neon-muted)] hover:text-white hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors"
+                                                    >
+                                                        <Key className="w-4 h-4" /> API Key
+                                                    </Link>
+                                                    <Link
+                                                        href="/dashboard/usage"
+                                                        onClick={() => setIsProfileOpen(false)}
+                                                        className="w-full text-left px-3 py-2 text-sm text-[var(--color-neon-muted)] hover:text-white hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors"
+                                                    >
+                                                        <Activity className="w-4 h-4" /> Usage
+                                                    </Link>
+                                                    <div className="border-t border-[var(--color-neon-border)] my-1" />
                                                     <button
                                                         onClick={() => signOut({ callbackUrl: '/' })}
                                                         className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-400/10 rounded-lg flex items-center gap-2 transition-colors group"
