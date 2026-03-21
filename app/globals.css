@@ -360,3 +360,49 @@
 .config-input:focus {
   border-color: var(--color-neon-primary);
 }
+
+/* ─── Endless Marquee ─── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+  display: flex;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Shooting Star ─── */
+@keyframes shooting-star {
+  0% { transform: rotate(135deg) translateX(0); opacity: 0; width: 0; }
+  10% { opacity: 1; width: 15px; }
+  20% { opacity: 1; width: 150px; }
+  80% { opacity: 1; width: 150px; }
+  100% { transform: rotate(135deg) translateX(1500px); opacity: 0; width: 150px; }
+}
+
+.animate-shooting-star {
+  position: absolute;
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 153, 0.8), #fff);
+  animation: shooting-star 4s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 153, 0.8));
+}
+
+.animate-shooting-star::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 12px 2px rgba(0, 229, 153, 0.9);
+}

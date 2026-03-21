@@ -36,6 +36,10 @@ export const metadata: Metadata = {
     description: 'Bulk-generate verifiable certificates in seconds via Excel or API. Secure, QR-powered verification included.',
     images: ['/og-image.png'],
   },
+  icons: {
+    icon: '/vuralogo.png',
+    apple: '/vuralogo.png',
+  },
 }
 
 import { Providers } from "@/components/Providers"
