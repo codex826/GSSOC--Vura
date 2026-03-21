@@ -198,7 +198,7 @@ export default function InteractiveShowcase() {
 
     return (
         <div
-            className="relative w-full flex flex-col lg:flex-row items-center justify-center lg:h-[450px] lg:-mt-32 gap-6 lg:gap-0"
+            className="relative w-full flex flex-col lg:flex-row items-center justify-center lg:h-[450px] gap-6 lg:gap-0"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -206,9 +206,7 @@ export default function InteractiveShowcase() {
             <div className="relative z-20 w-[95%] sm:w-auto flex flex-row lg:flex-col items-center gap-2 bg-[rgba(20,20,20,0.6)] backdrop-blur-xl border border-white/10 rounded-full lg:rounded-[2rem] p-2 lg:py-3 shadow-2xl overflow-x-auto no-scrollbar">
 
                 {/* Vura Logo at Top */}
-                <div className="w-10 h-10 rounded-full bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_15px_rgba(0,229,153,0.3)] shrink-0 lg:mb-2 lg:mt-1">
-                    <div className="w-3.5 h-3.5 bg-black rounded-[2px] rotate-45" />
-                </div>
+                <img src="/vuralogo.png" alt="Vura Logo" className="w-12 h-12 object-contain shrink-0 lg:mb-2 lg:mt-1 hover:scale-105 transition-transform" />
 
                 <div className="hidden lg:block w-6 h-[1px] bg-white/10 lg:mb-2" />
                 <div className="lg:hidden h-6 w-[1px] bg-white/10 mx-1 shrink-0" />
@@ -244,8 +242,11 @@ export default function InteractiveShowcase() {
                 </div>
             </div>
 
-            {/* Left Floating Card -> Stacked top on mobile */}
-            <div className="relative lg:absolute lg:right-[calc(50%+44px)] xl:right-[calc(50%+48px)] z-10 lg:origin-right w-full lg:w-auto flex justify-center">
+            {/* Mobile Spacer Block to maintain height for absolute elements */}
+            <div className="w-full h-[380px] lg:hidden shrink-0 pointer-events-none" />
+
+            {/* Left Floating Card -> Overlapped on mobile, normal on desktop */}
+            <div className="absolute left-[-5%] sm:left-[5%] top-[60px] lg:left-auto lg:top-auto lg:right-[calc(50%+44px)] xl:right-[calc(50%+48px)] z-10 lg:origin-right w-auto flex justify-center scale-[0.75] sm:scale-[0.85] lg:scale-100">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={`left-${activeTab.id}`}
@@ -260,8 +261,8 @@ export default function InteractiveShowcase() {
                 </AnimatePresence>
             </div>
 
-            {/* Right Floating Card -> Stacked bottom on mobile */}
-            <div className="relative lg:absolute lg:left-[calc(50%+44px)] xl:left-[calc(50%+48px)] z-10 lg:origin-left w-full lg:w-auto flex justify-center">
+            {/* Right Floating Card -> Overlapped on mobile, normal on desktop */}
+            <div className="absolute right-[-5%] sm:right-[5%] top-[140px] lg:right-auto lg:top-auto lg:left-[calc(50%+44px)] xl:left-[calc(50%+48px)] z-20 lg:origin-left w-auto flex justify-center scale-[0.75] sm:scale-[0.85] lg:scale-100">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={`right-${activeTab.id}`}

@@ -21,10 +21,20 @@ const FEATURES = [
     { icon: Activity, title: "Usage Analytics", desc: "Track every API call — endpoint, status, cert ID, timestamp.", color: "#f87171", bg: "rgba(248,113,113,0.08)" },
 ]
 
+const REVIEWS = [
+    { name: "Shivam Murkute", role: "Event Organizer", rating: 5, text: "Vura saved us countless hours during our last hackathon. Generating 500+ certificates took literally 2 seconds instead of a whole weekend. Incredibly reliable." },
+    { name: "Swayam Polakhare", role: "Tech Lead", rating: 4.5, text: "The API integration is flawless. We plugged Vura directly into our internal LMS, and now every student receives a verifiable PDF the moment they finish a course." },
+    { name: "Swaraj Singh", role: "Operations Head", rating: 4, text: "The QR verification system gives so much credibility to our workshops. Participants love being able to instantly prove their credentials online." },
+    { name: "Mayank Tiwari", role: "University Administrator", rating: 5, text: "What used to be a massive logistical headache at the end of every semester is completely automated now. The visual template mapper is a lifesaver." },
+    { name: "Sujal Dubey", role: "Community Manager", rating: 4.5, text: "Best certificate generator out there. Extremely fast, the Next.js performance is snappy, and the generated PDFs look incredibly professional." },
+    { name: "Karan Sathe", role: "Startup Founder", rating: 5, text: "We needed a robust way to issue early-adopter certificates. Vura's AWS-backed storage and unique IDs gave us exactly the security and scale we required." },
+]
+
 const STEPS = [
-    { n: "01", icon: FileText, title: "Upload Template", desc: "Drop your blank PDF design. Use the visual mapper to pin name, course, date, and QR fields." },
-    { n: "02", icon: FileSpreadsheet, title: "Map Your Data", desc: "Upload an Excel file with Name, Course, IssueDate columns — or POST via API with JSON." },
-    { n: "03", icon: Sparkles, title: "Generate & Share", desc: "Click Generate. Vura builds, uploads to S3, and returns direct PDF + verify links instantly." },
+    { n: "01", icon: User, title: "Create Account", desc: "Sign up and secure your API keys to get started with Vura." },
+    { n: "02", icon: FileText, title: "Upload Template", desc: "Drop your blank PDF design. Use the visual mapper to pin name, course, date, and QR fields." },
+    { n: "03", icon: FileSpreadsheet, title: "Map Your Data", desc: "Upload an Excel file with Name, Course, IssueDate columns — or POST via API with JSON." },
+    { n: "04", icon: Sparkles, title: "Generate & Share", desc: "Click Generate. Vura builds, uploads to S3, and returns direct PDF + verify links instantly." },
 ]
 
 export default function LandingContent({ session }: { session: any }) {
@@ -32,6 +42,7 @@ export default function LandingContent({ session }: { session: any }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [searchId, setSearchId] = useState("")
     const [isSearchOpen, setIsSearchOpen] = useState(false)
+    const [activeStep, setActiveStep] = useState(1)
     const profileRef = useRef<HTMLDivElement>(null)
     const { scrollY } = useScroll()
     const router = useRouter()
@@ -58,9 +69,7 @@ export default function LandingContent({ session }: { session: any }) {
                 className="fixed top-0 z-50 w-full backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.45)] group-hover:shadow-[0_0_22px_rgba(0,229,153,0.65)] transition-all">
-                            <div className="w-3 h-3 bg-black rounded-sm rotate-45" />
-                        </div>
+                        <img src="/vuralogo.png" alt="Vura Logo" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
                         <span className="text-xl font-black tracking-widest uppercase text-white">VURA</span>
                     </Link>
 
@@ -200,179 +209,310 @@ export default function LandingContent({ session }: { session: any }) {
 
                         {/* Right — Interactive Showcase */}
                         <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                            className="relative z-10 w-full max-w-sm lg:max-w-md xl:max-w-lg shrink-0 flex items-center justify-center lg:-mt-32">
+                            className="relative z-10 w-full max-w-sm lg:max-w-md xl:max-w-lg shrink-0 flex items-center justify-center lg:-mt-8">
                             <InteractiveShowcase />
                         </motion.div>
                     </div>
                 </section>
 
                 {/* ─── Stats Bar ─── */}
-                <section className="relative border-y border-[var(--color-neon-border)] bg-[rgba(10,10,10,0.8)] backdrop-blur-md py-12 overflow-hidden">
+                <section className="relative bg-[rgba(10,10,10,0.8)] backdrop-blur-md py-12 overflow-hidden">
                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,229,153,0.05)_0%,transparent_70%)] pointer-events-none" />
                     <div className="relative z-10 max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                         {[{ value: "500+", label: "Certificates Generated" }, { value: "20+", label: "Organizations Using Vura" }, { value: "99.9%", label: "Uptime SLA" }, { value: "<2s", label: "Avg Generation Time" }].map((s, i) => (
                             <motion.div key={s.label} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex flex-col items-center gap-1">
-                                <span className="text-3xl font-extrabold text-white">{s.value}</span>
-                                <span className="text-sm text-[var(--color-neon-muted)]">{s.label}</span>
+                                <span className="text-3xl font-medium tracking-tight text-white">{s.value}</span>
+                                <span className="text-sm font-medium tracking-tight text-[var(--color-neon-muted)]">{s.label}</span>
                             </motion.div>
                         ))}
                     </div>
                 </section>
 
                 {/* ─── How It Works ─── */}
-                <section id="how-it-works" className="py-28 px-6 bg-[rgba(6,6,6,0.6)] border-b border-[var(--color-neon-border)]">
+                <section id="how-it-works" className="py-28 px-6 bg-[rgba(6,6,6,0.6)] z-10 relative">
                     <div className="max-w-6xl mx-auto">
                         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-                            <h2 className="mt-5 text-4xl md:text-5xl font-bold text-white tracking-tight">From spreadsheet<br />to certificate in 3 steps</h2>
+                            <span className="section-label inline-flex">Workflow</span>
+                            <h2 className="mt-5 text-4xl md:text-5xl font-medium tracking-tight text-white">From spreadsheet<br />to certificate in 4 steps</h2>
                         </motion.div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative mt-12 pt-4">
-                            {/* Horizontal connecting line behind the badges */}
-                            <div className="absolute top-4 left-[16.66%] right-[16.66%] h-px bg-[var(--color-neon-primary)]/30 hidden md:block z-0" />
+                        
+                        <div className="relative mx-auto mt-20 max-w-5xl">
+                            {/* Visual Connecting Line (Desktop) */}
+                            <div className="hidden md:block absolute top-[17px] left-[12.5%] right-[12.5%] h-[2px] bg-[#222] z-0">
+                                <div className="h-full bg-[var(--color-neon-primary)] transition-all duration-500 shadow-[0_0_8px_rgba(0,229,153,0.4)]" style={{ width: `${(activeStep / (STEPS.length - 1)) * 100}%` }} />
+                            </div>
 
-                            {STEPS.map((s, i) => (
-                                <motion.div key={s.n} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}
-                                    className="relative flex flex-col items-center text-center p-8 rounded-2xl border border-white/10 bg-[#070707] hover:border-[var(--color-neon-primary)]/40 transition-colors duration-300 z-10 w-full">
-                                    
-                                    {/* Number Badge placed on the top border */}
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-[var(--color-neon-primary)] flex items-center justify-center text-[11px] font-black text-black ring-4 ring-[#070707] shadow-[0_0_15px_rgba(0,229,153,0.5)]">
-                                        {i + 1}
-                                    </div>
-                                    
-                                    {/* Icon Container with subtle borders similar to mockup */}
-                                    <div className="w-16 h-16 rounded-xl border border-[var(--color-neon-primary)]/20 bg-[var(--color-neon-primary)]/[0.02] flex items-center justify-center mt-6 mb-8 group-hover:bg-[var(--color-neon-primary)]/[0.05] transition-colors">
-                                        <s.icon className="w-6 h-6 text-[var(--color-neon-primary)]" strokeWidth={1.5} />
-                                    </div>
-                                    
-                                    <h3 className="text-xl font-bold text-white mb-4 tracking-tight">{s.title}</h3>
-                                    <p className="text-[14px] text-[var(--color-neon-muted)] leading-relaxed">{s.desc}</p>
-                                </motion.div>
-                            ))}
+                            <div className="flex flex-col md:flex-row relative z-10 w-full justify-between gap-12 md:gap-4">
+                                {STEPS.map((s, i) => {
+                                    const isActive = i === activeStep
+                                    const isCompleted = i < activeStep
+                                    const isInactive = i > activeStep
+                                    const isLast = i === STEPS.length - 1
+
+                                    return (
+                                        <div 
+                                            key={s.n} 
+                                            className="relative flex-1 flex flex-row md:flex-col gap-6 md:gap-0 group cursor-pointer items-start md:items-center text-left md:text-center"
+                                            onMouseEnter={() => setActiveStep(i)}
+                                        >
+                                            {/* Visual Connecting Line (Mobile) */}
+                                            {!isLast && (
+                                                <div className="md:hidden absolute left-[17px] top-[36px] bottom-[-48px] w-[2px] bg-[#222] z-0">
+                                                    <div className={`w-full h-full transition-colors duration-500 ${isCompleted ? 'bg-[var(--color-neon-primary)]' : 'bg-transparent'}`} />
+                                                </div>
+                                            )}
+
+                                            {/* Step Node */}
+                                            <div className="relative shrink-0 flex flex-col items-center z-10 bg-[#060606] p-1 rounded-full md:mb-8">
+                                                <div className="w-[28px] h-[28px] rounded-full flex items-center justify-center relative bg-[#070707]">
+                                                    {/* Outer Halo for active */}
+                                                    {isActive && (
+                                                        <motion.div layoutId="stepper-halo" className="absolute inset-[-8px] rounded-full bg-[var(--color-neon-primary)]/20 shadow-[0_0_20px_rgba(0,229,153,0.3)] pointer-events-none" />
+                                                    )}
+                                                    
+                                                    {/* Inner Circle / Dot */}
+                                                    {isCompleted && (
+                                                        <div className="w-full h-full rounded-full bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.5)] z-10 transition-all duration-300">
+                                                           <CheckCircle className="w-4 h-4 text-black" strokeWidth={3} />
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {isActive && (
+                                                        <div className="w-full h-full rounded-full bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.5)] z-10 transition-all duration-300 scale-110">
+                                                           <div className="w-[8px] h-[8px] rounded-full bg-white shadow-sm" />
+                                                        </div>
+                                                    )}
+
+                                                    {isInactive && (
+                                                        <div className="w-full h-full rounded-full bg-[#111] border-2 border-[#333] flex items-center justify-center z-10 transition-all duration-300 group-hover:border-[#555]">
+                                                           <div className="w-[6px] h-[6px] rounded-full bg-[#444] group-hover:bg-[#666] transition-colors" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Step Content */}
+                                            <div className={`flex flex-col items-start md:items-center transition-all duration-300 w-full pt-4 ${isActive ? 'opacity-100' : 'opacity-40 group-hover:opacity-70'}`}>
+                                                
+                                                <h3 className="text-lg font-medium tracking-tight text-white mb-3">
+                                                    {s.title}
+                                                </h3>
+                                                <p className="text-[14px] text-[var(--color-neon-muted)] leading-relaxed md:max-w-[220px] lg:max-w-[260px] md:mx-auto">
+                                                    {s.desc}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 {/* ─── Features ─── */}
-                <section id="features" className="py-28 px-6 relative">
-                    <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[radial-gradient(ellipse_at_top_right,rgba(157,78,221,0.08)_0%,transparent_60%)] pointer-events-none" />
-                    <div className="max-w-7xl mx-auto relative z-10">
-                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-                            <span className="section-label inline-flex">Features</span>
-                            <h2 className="mt-5 text-4xl md:text-5xl font-bold text-white">Everything you need,<br />nothing you don&apos;t</h2>
-                            <p className="mt-4 text-[var(--color-neon-muted)] max-w-xl mx-auto">Vura is designed to stay out of your way — powerful under the hood, effortless on the surface.</p>
+                <section id="features" className="py-28 px-6 relative overflow-hidden bg-[rgba(3,3,3,0.8)]">
+                    
+                    {/* Dark Green Grid Overlay */}
+                    <div className="absolute inset-0 z-0 pointer-events-none opacity-20" style={{
+                        backgroundImage: `
+                            linear-gradient(to right, rgba(0, 229, 153, 0.02) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(0, 229, 153, 0.02) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '40px 40px',
+                        maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 90%)',
+                        WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 90%)'
+                    }} />
+
+                    {/* Fixed Startry Background Field */}
+                    <div className="absolute inset-0 pointer-events-none z-0">
+                        {[
+                            { top: "12%", left: "18%", delay: "0s" },
+                            { top: "25%", left: "68%", delay: "1.2s" },
+                            { top: "45%", left: "12%", delay: "0.5s" },
+                            { top: "58%", left: "55%", delay: "2.1s" },
+                            { top: "82%", left: "35%", delay: "1.5s" },
+                            { top: "72%", left: "85%", delay: "0.2s" },
+                            { top: "18%", left: "38%", delay: "2.8s" },
+                            { top: "88%", left: "68%", delay: "1.1s" },
+                            { top: "8%", left: "82%", delay: "0.8s" },
+                            { top: "65%", left: "8%", delay: "1.8s" },
+                            { top: "92%", left: "22%", delay: "0.3s" },
+                            { top: "32%", left: "88%", delay: "2.5s" },
+                        ].map((s, i) => (
+                            <div key={i} className="absolute w-[1.5px] h-[1.5px] bg-white rounded-full animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.8)] opacity-60"
+                                 style={{ top: s.top, left: s.left, animationDelay: s.delay, animationDuration: '3s' }} />
+                        ))}
+                    </div>
+
+                    {/* Shooting Stars */}
+                    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                        <div className="animate-shooting-star" style={{ top: '-10%', right: '10%', animationDelay: '0s', animationDuration: '4s' }} />
+                        <div className="animate-shooting-star" style={{ top: '20%', right: '-5%', animationDelay: '1.5s', animationDuration: '3.5s' }} />
+                        <div className="animate-shooting-star" style={{ top: '5%', right: '40%', animationDelay: '3s', animationDuration: '4.5s' }} />
+                    </div>
+
+                    {/* Massive Soft Green Glow Center */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] bg-[radial-gradient(ellipse_at_center,rgba(0,229,153,0.03)_0%,transparent_60%)] pointer-events-none mix-blend-screen" />
+
+
+
+                    <div className="max-w-[1400px] mx-auto relative z-10">
+                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16 relative">
+                            <span className="section-label inline-flex !bg-[rgba(0,229,153,0.15)] !border-[rgba(0,229,153,0.4)] !text-[#00e599] backdrop-blur-md shadow-[0_0_20px_rgba(0,229,153,0.1)]">Features</span>
+                            <h2 className="mt-5 text-4xl md:text-5xl font-medium tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">Everything you need,<br />nothing you don&apos;t</h2>
                         </motion.div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                        {/* Desktop Features Grid */}
+                        <div className="hidden md:grid md:grid-cols-3 xl:flex xl:flex-nowrap xl:justify-between gap-5 pb-10 pt-4 w-full">
                             {FEATURES.map((f, i) => (
-                                <motion.div key={f.title} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}
-                                    whileHover={{ y: -5 }} className="glass-card flex flex-col gap-4 group transition-all duration-300">
-                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: f.bg, border: `1px solid ${f.color}25` }}>
-                                        <f.icon className="w-5 h-5" style={{ color: f.color }} />
+                                <motion.div key={f.title} initial={{ opacity: 0, scale: 0.95, y: 20 }} whileInView={{ opacity: 1, scale: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}
+                                    whileHover={{ y: -8, scale: 1.02 }} 
+                                    className="md:w-auto xl:flex-1 rounded-[2rem] flex flex-col items-center justify-center p-8 text-center shadow-[0_8px_30px_rgba(0,0,0,0.3)] transition-all duration-300 relative overflow-hidden backdrop-blur-xl cursor-pointer group hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.5)]"
+                                    style={{ backgroundColor: f.bg, border: `1px solid ${f.color}90` }}>
+                                    
+                                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                                    <div className="relative z-10 transition-transform duration-300 group-hover:scale-110 mb-5 text-[var(--color-neon-primary)]" style={{ color: f.color }}>
+                                        <f.icon className="w-12 h-12" strokeWidth={1.5} />
                                     </div>
-                                    <div>
-                                        <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
-                                        <p className="text-sm text-[var(--color-neon-muted)] leading-relaxed">{f.desc}</p>
-                                    </div>
+                                    
+                                    <h3 className="text-[17px] md:text-lg font-medium tracking-tight mb-3 relative z-10 leading-tight px-2 transition-colors duration-300" style={{ color: f.color }}>
+                                        {f.title}
+                                    </h3>
+
+                                    <p className="text-[14px] leading-relaxed relative z-10 opacity-90 transition-colors duration-300 max-w-[200px]" style={{ color: f.color }}>
+                                        {f.desc}
+                                    </p>
                                 </motion.div>
                             ))}
                         </div>
-                    </div>
-                </section>
 
-                {/* ─── Live Preview ─── */}
-                <section className="py-24 px-6 border-y border-[var(--color-neon-border)] bg-[rgba(6,6,6,0.7)]">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
-                            <span className="section-label inline-flex">Live Preview</span>
-                            <h2 className="mt-5 text-4xl md:text-5xl font-bold text-white">See Vura in action</h2>
-                            <p className="mt-4 text-[var(--color-neon-muted)] max-w-xl mx-auto">From API call to verified certificate — the full workflow in one view.</p>
-                        </motion.div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-                            {/* Terminal */}
-                            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-                                className="rounded-2xl overflow-hidden border border-[var(--color-neon-border)] bg-[#0d0d0d]">
-                                <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--color-neon-border)] bg-[#111]">
-                                    <div className="w-3 h-3 rounded-full bg-[#ff5f56]" /><div className="w-3 h-3 rounded-full bg-[#ffbd2e]" /><div className="w-3 h-3 rounded-full bg-[#27c93f]" />
-                                    <span className="text-xs text-[var(--color-neon-muted)] ml-2 font-mono">POST /api/certificates/create</span>
-                                </div>
-                                <div className="p-5 font-mono text-xs leading-7 text-[#eaeaea]">
-                                    <span className="text-[#9d4edd]">curl</span> <span className="text-[#00e599]">-X POST</span> <span className="text-[#eaeaea] opacity-60">https://vurakit.vercel.app/api</span><br />
-                                    <span className="text-[#9d4edd]">{"  "}-H</span> <span className="text-amber-400">&quot;Authorization: Bearer sk_vura_...&quot;</span><br />
-                                    <span className="text-[#9d4edd]">{"  "}-d</span> <span className="text-[#666]">&#123;</span><br />
-                                    <span className="text-[#eaeaea]">{"       "}&quot;name&quot;:</span> <span className="text-amber-400">&quot;Om Narkhede&quot;</span><span className="text-[#666]">,</span><br />
-                                    <span className="text-[#eaeaea]">{"       "}&quot;course&quot;:</span> <span className="text-amber-400">&quot;Full-Stack Engineering&quot;</span><span className="text-[#666]">,</span><br />
-                                    <span className="text-[#eaeaea]">{"       "}&quot;issueDate&quot;:</span> <span className="text-amber-400">&quot;2026-03-21&quot;</span><br />
-                                    <span className="text-[#666]">{"     "}&#125;</span><br /><br />
-                                    <span className="text-[var(--color-neon-muted)]">{"// "} Response</span><br />
-                                    <span className="text-[#666]">&#123;</span><br />
-                                    <span className="text-[#00e599]">{"  "}&quot;certificateId&quot;</span><span className="text-[#eaeaea]">:</span> <span className="text-amber-400">&quot;CERT-A1B2C3D4&quot;</span><span className="text-[#666]">,</span><br />
-                                    <span className="text-[#00e599]">{"  "}&quot;pdfUrl&quot;</span><span className="text-[#eaeaea]">:</span> <span className="text-amber-400">&quot;https://s3.aws.../cert.pdf&quot;</span><span className="text-[#666]">,</span><br />
-                                    <span className="text-[#00e599]">{"  "}&quot;verifyUrl&quot;</span><span className="text-[#eaeaea]">:</span> <span className="text-amber-400 text-[10px]">&quot;https://vurakit.vercel.app/verify/CERT-A1B2C3D4&quot;</span><br />
-                                    <span className="text-[#666]">&#125;</span>
-                                </div>
-                            </motion.div>
+                        {/* Mobile Auto-Scrolling Features Marquee */}
+                        <div className="md:hidden relative flex overflow-hidden w-full py-4 -mx-6 px-6" style={{ WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)", maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)" }}>
+                            <div className="flex shrink-0 gap-4 w-max animate-marquee pb-4">
+                                {[...FEATURES, ...FEATURES].map((f, i) => (
+                                    <div key={`${f.title}-${i}`}
+                                        className="shrink-0 w-[240px] rounded-[2rem] flex flex-col items-center justify-center p-8 text-center shadow-[0_8px_30px_rgba(0,0,0,0.3)] transition-all duration-300 relative overflow-hidden backdrop-blur-xl cursor-pointer group hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.5)]"
+                                        style={{ backgroundColor: f.bg, border: `1px solid ${f.color}90` }}>
+                                        
+                                        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                            {/* Verify UI */}
-                            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
-                                className="rounded-2xl overflow-hidden border border-[#27c93f]/25 bg-[rgba(10,10,10,0.9)] flex flex-col">
-                                <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--color-neon-border)] bg-[#111]">
-                                    <div className="w-3 h-3 rounded-full bg-[#ff5f56]" /><div className="w-3 h-3 rounded-full bg-[#ffbd2e]" /><div className="w-3 h-3 rounded-full bg-[#27c93f]" />
-                                    <div className="flex items-center gap-2 mx-auto bg-[#0d0d0d] border border-[#2a2a2a] rounded-md px-4 py-1 text-[11px] text-[#555]">
-                                        <ShieldCheck className="w-3 h-3 text-[var(--color-neon-primary)]" /> vurakit.vercel.app/verify/CERT-A1B2C3D4
+                                        <div className="relative z-10 transition-transform duration-300 group-hover:scale-110 mb-5 text-[var(--color-neon-primary)]" style={{ color: f.color }}>
+                                            <f.icon className="w-12 h-12" strokeWidth={1.5} />
+                                        </div>
+                                        
+                                        <h3 className="text-[17px] font-medium tracking-tight mb-3 relative z-10 leading-tight px-2 transition-colors duration-300" style={{ color: f.color }}>
+                                            {f.title}
+                                        </h3>
+
+                                        <p className="text-[14px] leading-relaxed relative z-10 opacity-90 transition-colors duration-300 max-w-[200px]" style={{ color: f.color }}>
+                                            {f.desc}
+                                        </p>
                                     </div>
-                                </div>
-                                <div className="flex-1 flex flex-col items-center justify-center p-8 gap-4">
-                                    <div className="w-16 h-16 rounded-full bg-[var(--color-neon-primary)]/10 border-2 border-[var(--color-neon-primary)]/40 flex items-center justify-center shadow-[0_0_32px_rgba(0,229,153,0.2)]">
-                                        <CheckCircle className="w-8 h-8 text-[var(--color-neon-primary)]" />
-                                    </div>
-                                    <div className="badge-valid">✓ Valid Certificate</div>
-                                    <div className="w-full space-y-3 mt-2">
-                                        {[["Recipient", "Om Narkhede"], ["Course", "Full-Stack Engineering"], ["Date", "21 March 2026"], ["Cert ID", "CERT-A1B2C3D4"]].map(([label, val]) => (
-                                            <div key={label} className="flex items-center justify-between py-2.5 border-b border-[var(--color-neon-border)]/50 text-sm">
-                                                <span className="text-[var(--color-neon-muted)]">{label}</span>
-                                                <span className={`text-white font-medium ${label === "Cert ID" ? "font-mono text-xs" : ""}`}>{val}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="w-full mt-2 py-3 rounded-xl bg-[var(--color-neon-primary)] text-black text-sm font-bold text-center shadow-[0_0_16px_rgba(0,229,153,0.3)]">View Original PDF</div>
-                                    <div className="flex items-center gap-2 text-xs text-[var(--color-neon-muted)]">
-                                        <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-neon-primary)]" /> Verified by Vura Certificate Authority
-                                    </div>
-                                </div>
-                            </motion.div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </section>
+
+                {/* ─── Testimonials ─── */}
+                <div className="px-4 py-12 md:px-8 w-full max-w-[1400px] mx-auto">
+                    <section id="reviews" className="py-24 px-6 border border-[var(--color-neon-border)] bg-[#030604] relative overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_0_80px_rgba(3,6,4,0.8)]">
+                    
+                    <div className="max-w-6xl mx-auto relative z-10">
+                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16 relative">
+                            <span className="section-label inline-flex !bg-[rgba(0,229,153,0.15)] !border-[rgba(0,229,153,0.4)] !text-[#00e599] backdrop-blur-md shadow-[0_0_20px_rgba(0,229,153,0.1)]">Wall of Love</span>
+                            <h2 className="mt-5 text-4xl md:text-5xl font-medium tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">Loved by creators<br />and organizations</h2>
+                        </motion.div>
+                        
+                        <div className="relative flex overflow-hidden w-full max-w-7xl mx-auto py-8 lg:-mx-12 px-6 lg:px-12" style={{ WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)", maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)" }}>
+                            <div className="flex shrink-0 gap-6 w-max animate-marquee">
+                                {[...REVIEWS, ...REVIEWS].map((r, i) => (
+                                    <div key={`${r.name}-${i}`}
+                                        className="w-[340px] md:w-[380px] p-8 rounded-3xl bg-[rgba(10,10,10,0.8)] border border-[var(--color-neon-border)] backdrop-blur-xl hover:border-[var(--color-neon-primary)]/40 transition-colors shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex flex-col justify-between gap-6 group hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
+                                        <div className="flex items-center gap-1">
+                                            {[1, 2, 3, 4, 5].map((star) => {
+                                                const pathD = "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z";
+                                                if (r.rating >= star) {
+                                                    return <svg key={star} className="w-5 h-5 text-[#00e599]" fill="currentColor" viewBox="0 0 20 20"><path d={pathD} /></svg>;
+                                                } else if (r.rating >= star - 0.5) {
+                                                    return (
+                                                        <div key={star} className="relative w-5 h-5 text-[#00e599]">
+                                                            <svg className="absolute inset-0 w-5 h-5 opacity-30" fill="currentColor" viewBox="0 0 20 20"><path d={pathD} /></svg>
+                                                            <div className="absolute inset-y-0 left-0 w-[50%] overflow-hidden">
+                                                                <svg className="w-5 h-5 max-w-none" fill="currentColor" viewBox="0 0 20 20"><path d={pathD} /></svg>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                }
+                                                return <svg key={star} className="w-5 h-5 text-[#00e599] opacity-30" fill="currentColor" viewBox="0 0 20 20"><path d={pathD} /></svg>;
+                                            })}
+                                            <span className="text-[var(--color-neon-primary)] text-sm font-bold ml-1.5">{r.rating.toFixed(1)}</span>
+                                        </div>
+                                        <p className="text-[15px] text-white/70 leading-relaxed flex-1 group-hover:text-white transition-colors duration-300">
+                                            &quot;{r.text}&quot;
+                                        </p>
+                                        <div className="flex items-center gap-4 pt-6 border-t border-[var(--color-neon-border)]/50">
+                                            <div className="w-12 h-12 rounded-full bg-[var(--color-neon-primary)]/10 flex items-center justify-center text-[var(--color-neon-primary)] font-black text-lg border border-[var(--color-neon-primary)]/30 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(0,229,153,0.2)]">
+                                                {r.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <p className="text-white font-semibold text-sm">{r.name}</p>
+                                                <p className="text-[12px] text-[var(--color-neon-muted)] mt-0.5">{r.role}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                </div>
 
                 {/* ─── Pricing ─── */}
                 <section id="pricing" className="py-28 px-6">
                     <div className="max-w-5xl mx-auto">
                         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-                            <span className="section-label inline-flex">Pricing</span>
-                            <h2 className="mt-5 text-4xl md:text-5xl font-bold text-white">Simple, transparent pricing</h2>
-                            <p className="mt-4 text-[var(--color-neon-muted)]">Start for free. Scale when you need it.</p>
+                            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-4 leading-tight">Simple, transparent pricing</h2>
+                            <p className="text-lg text-[var(--color-neon-muted)]">Start for free. Scale when you need it.</p>
                         </motion.div>
-                        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto relative relative z-10">
                             {[
                                 { name: "Free", price: "₹0", sub: "No credit card required", primary: false, features: ["Up to 100 certificates/month", "Google & Email login", "S3 cloud storage", "QR verification links", "API access + secret key", "Usage stats dashboard"] },
                                 { name: "Pro", price: "₹999", sub: "For teams and events", primary: true, features: ["Unlimited certificates", "Everything in Free", "Custom branding", "Priority support", "Bulk export & analytics"] },
                             ].map((plan, i) => (
                                 <motion.div key={plan.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                                    className={`glass-card p-8 flex flex-col gap-6 relative overflow-hidden ${plan.primary ? "border-[var(--color-neon-primary)]/30" : ""}`}>
+                                    className={`bg-[#050505] rounded-2xl p-8 flex flex-col relative border transition-all duration-300 overflow-hidden ${plan.primary ? "border-[var(--color-neon-primary)]/40 hover:border-[var(--color-neon-primary)] shadow-[0_4px_30px_rgba(0,0,0,0.8)]" : "border-white/10 hover:border-white/20 shadow-xl"}`}>
                                     {plan.primary && (
-                                        <>
-                                            <div className="absolute top-4 right-4 px-3 py-1 text-xs font-bold bg-[var(--color-neon-primary)] text-black rounded-full shadow-[0_0_10px_rgba(0,229,153,0.5)]">Popular</div>
-                                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,229,153,0.05),transparent_60%)] pointer-events-none" />
-                                        </>
+                                        <div className="absolute top-0 right-0 px-4 py-1.5 text-[11px] font-bold tracking-widest uppercase bg-[var(--color-neon-primary)]/10 text-[var(--color-neon-primary)] border-b border-l border-[var(--color-neon-primary)]/20 rounded-bl-2xl">
+                                            Popular
+                                        </div>
                                     )}
-                                    <div>
-                                        <p className={`text-sm font-semibold uppercase tracking-wider ${plan.primary ? "text-[var(--color-neon-primary)]" : "text-[var(--color-neon-muted)]"}`}>{plan.name}</p>
-                                        <p className="text-4xl font-black text-white mt-2">{plan.price} <span className="text-lg text-[var(--color-neon-muted)] font-normal">/ mo</span></p>
-                                        <p className="text-sm text-[var(--color-neon-muted)] mt-1">{plan.sub}</p>
+                                    <div className="mb-6">
+                                        <p className={`text-[12px] font-semibold uppercase tracking-[0.2em] mb-4 ${plan.primary ? "text-[var(--color-neon-primary)]" : "text-[#888]"}`}>{plan.name}</p>
+                                        <div className="flex items-baseline gap-2 mb-2">
+                                            <span className="text-5xl font-semibold tracking-tighter text-white">{plan.price}</span>
+                                            <span className="text-sm font-medium text-[var(--color-neon-muted)]">/ mo</span>
+                                        </div>
+                                        <p className="text-[14px] text-[var(--color-neon-muted)] leading-relaxed">{plan.sub}</p>
                                     </div>
-                                    <ul className="flex flex-col gap-3 flex-1">
-                                        {plan.features.map(f => (<li key={f} className="flex items-center gap-3 text-sm text-[var(--color-neon-text)]"><CheckCircle className="w-4 h-4 shrink-0 text-[var(--color-neon-primary)]" />{f}</li>))}
+                                    
+                                    <div className="w-full h-[1px] bg-white/[0.06] mb-8" />
+                                    
+                                    <ul className="flex flex-col gap-4 flex-1 mb-8">
+                                        {plan.features.map(f => (
+                                            <li key={f} className="flex items-start gap-3.5 text-[14px] text-white/80">
+                                                <div className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 border ${plan.primary ? "bg-[var(--color-neon-primary)]/10 border-[var(--color-neon-primary)]/30" : "bg-white/5 border-white/10"}`}>
+                                                    <CheckCircle className={`w-[10px] h-[10px] ${plan.primary ? "text-[var(--color-neon-primary)]" : "text-white/60"}`} strokeWidth={3} />
+                                                </div>
+                                                <span className="leading-tight">{f}</span>
+                                            </li>
+                                        ))}
                                     </ul>
-                                    <Link href="/register" className={`py-3 text-center rounded-full font-semibold text-sm transition-all ${plan.primary ? 'btn-primary' : 'btn-secondary'}`}>
+                                    
+                                    <Link href="/register" className={`w-full py-3.5 rounded-xl text-center text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group ${plan.primary ? 'text-[var(--color-neon-primary)] border border-[var(--color-neon-primary)] hover:bg-[var(--color-neon-primary)]/10 text-[var(--color-neon-primary)]' : 'text-white border border-white/20 hover:bg-white/5 hover:border-white/40'}`}>
                                         {plan.primary ? "Start Free Trial" : "Get Started"}
+                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                 </motion.div>
                             ))}
@@ -381,51 +521,89 @@ export default function LandingContent({ session }: { session: any }) {
                 </section>
 
                 {/* ─── CTA ─── */}
-                <section className="py-24 px-6 relative overflow-hidden border-t border-[var(--color-neon-border)] bg-[rgba(6,6,6,0.8)]">
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,229,153,0.1)_0%,transparent_65%)] pointer-events-none" />
-                    <div className="absolute inset-0 bg-dot-pattern opacity-30 pointer-events-none" />
-                    <motion.div initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="max-w-3xl mx-auto text-center relative z-10">
-                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Ready to stop doing<br />this manually?</h2>
-                        <p className="text-[var(--color-neon-muted)] mb-8 text-lg">Join educators and event organizers saving hours each month with Vura.</p>
-                        <Link href={session ? "/app" : "/register"} className="relative inline-flex items-center justify-center px-10 py-4 text-lg font-bold text-[var(--color-neon-primary)] bg-transparent border border-[var(--color-neon-primary)] rounded-full hover:bg-[var(--color-neon-primary)]/10 hover:shadow-[0_0_30px_rgba(0,229,153,0.4)] hover:-translate-y-1 transition-all duration-300 group gap-2">
-                            Start Generating Certificates <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                    </motion.div>
-                </section>
+                <div className="px-4 py-12 md:px-8 w-full max-w-[1400px] mx-auto">
+                    <section className="py-24 px-6 relative overflow-hidden bg-[#030604] rounded-[2.5rem] md:rounded-[3.5rem] border border-[var(--color-neon-border)] shadow-2xl">
+                        
+                        {/* Crisp Geometric Grid Background */}
+                        <div className="absolute inset-0 z-0 pointer-events-none" style={{
+                            backgroundImage: `
+                                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+                            `,
+                            backgroundSize: '48px 48px',
+                            maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, transparent 100%)',
+                            WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, transparent 100%)'
+                        }} />
+                        
+                        {/* Top Accent Line */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[var(--color-neon-primary)]/40 to-transparent" />
+
+                        <motion.div initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="max-w-3xl mx-auto text-center relative z-10">
+                            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-6 leading-[1.1]">Ready to stop doing<br />this manually?</h2>
+                            <p className="text-[var(--color-neon-muted)] mb-10 text-lg md:text-xl max-w-xl mx-auto">Join educators and event organizers saving hours each month with Vura.</p>
+                            <Link href={session ? "/app" : "/register"} className="relative inline-flex items-center justify-center px-10 py-4 text-lg font-semibold text-[var(--color-neon-primary)] bg-transparent border border-[var(--color-neon-primary)] rounded-full hover:bg-[var(--color-neon-primary)]/10 hover:shadow-[0_0_20px_rgba(0,229,153,0.35)] hover:-translate-y-0.5 transition-all duration-300 group gap-2">
+                                Start Generating Certificates <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </motion.div>
+                    </section>
+                </div>
             </main>
 
             {/* ─── Footer ─── */}
-            <footer className="border-t border-[var(--color-neon-border)] bg-[var(--color-neon-surface)] pt-14 pb-8 px-6">
+            <footer className="relative bg-[#02040A] pt-16 pb-8 px-6 border-t border-[var(--color-neon-border)]/50 mt-20">
+                {/* Subtle top glow */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-[var(--color-neon-primary)]/20 to-transparent" />
+                
                 <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
-                        <div className="md:col-span-2">
-                            <Link href="/" className="flex items-center gap-2 mb-4 w-fit group">
-                                <div className="w-8 h-8 rounded-lg bg-[var(--color-neon-primary)] flex items-center justify-center group-hover:scale-105 transition-transform"><div className="w-3 h-3 bg-black rounded-sm rotate-45" /></div>
-                                <span className="text-xl font-black tracking-widest uppercase text-white">VURA</span>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 mb-16">
+                        <div className="col-span-2 flex flex-col items-start">
+                            <Link href="/" className="flex items-center gap-2 mb-6 w-fit group">
+                                <img src="/vuralogo.png" alt="Vura Logo" className="w-8 h-8 object-contain transition-transform group-hover:scale-110" />
+                                <span className="text-lg font-bold tracking-widest uppercase text-white">Vura</span>
                             </Link>
-                            <p className="text-sm text-[var(--color-neon-muted)] leading-relaxed max-w-sm">The modern certificate generation platform for educators, trainers, and event organizers. Built with Next.js, Prisma, and AWS.</p>
-                            <div className="flex items-center gap-3 mt-5">
+                            <p className="text-[13px] text-[var(--color-neon-muted)] leading-relaxed max-w-xs mb-6">
+                                The modern certificate generation platform for educators, trainers, and startup events.
+                            </p>
+                            <div className="flex items-center gap-4">
                                 {[{ icon: Github, href: "https://github.com/omn7/Vura" }, { icon: Twitter, href: "https://x.com/mr_codex" }, { icon: Linkedin, href: "https://linkedin.com/in/omnarkhede/" }, { icon: Mail, href: "mailto:dev.om@outlook.com" }].map(({ icon: Icon, href }) => (
-                                    <a key={href} href={href} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-neon-muted)] hover:text-white hover:bg-white/5 rounded-full transition-colors"><Icon className="w-4 h-4" /></a>
+                                    <a key={href} href={href} target="_blank" rel="noreferrer" className="text-[#888] hover:text-[#00e599] transition-colors">
+                                        <Icon className="w-4 h-4" />
+                                    </a>
                                 ))}
                             </div>
                         </div>
-                        <div>
-                            <p className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Product</p>
-                            <ul className="flex flex-col gap-3">
-                                {[["Features", "#features"], ["How It Works", "#how-it-works"], ["Pricing", "#pricing"], ["Dashboard", "/dashboard"], ["API Docs", "/docs"]].map(([label, href]) => (<li key={label}><a href={href} className="text-sm text-[var(--color-neon-muted)] hover:text-white hover:translate-x-1 inline-block transition-all">{label}</a></li>))}
+                        
+                        <div className="col-span-1">
+                            <p className="text-xs font-semibold text-white uppercase tracking-wider mb-5">Product</p>
+                            <ul className="flex flex-col gap-3.5">
+                                {[["Features", "#features"], ["How It Works", "#how-it-works"], ["Pricing", "#pricing"], ["Dashboard", "/dashboard"], ["API Docs", "/docs"]].map(([label, href]) => (
+                                    <li key={label}>
+                                        <a href={href} className="text-[13px] text-[#888] hover:text-white transition-colors">{label}</a>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
-                        <div>
-                            <p className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</p>
-                            <ul className="flex flex-col gap-3">
-                                {[["About", "/about"], ["GitHub", "https://github.com/omn7/Vura"], ["Privacy", "/privacy"], ["Terms", "/terms"]].map(([label, href]) => (<li key={label}><a href={href} className="text-sm text-[var(--color-neon-muted)] hover:text-white hover:translate-x-1 inline-block transition-all">{label}</a></li>))}
+
+                        <div className="col-span-1">
+                            <p className="text-xs font-semibold text-white uppercase tracking-wider mb-5">Company</p>
+                            <ul className="flex flex-col gap-3.5">
+                                {[["About", "/about"], ["Privacy Policy", "/privacy"], ["Terms of Service", "/terms"], ["Contact", "mailto:dev.om@outlook.com"]].map(([label, href]) => (
+                                    <li key={label}>
+                                        <a href={href} className="text-[13px] text-[#888] hover:text-white transition-colors">{label}</a>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>
-                    <div className="pt-8 border-t border-[var(--color-neon-border)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--color-neon-muted)]">
-                        <p>© {new Date().getFullYear()} <a href="https://omnarkhede.tech" target="_blank" rel="noreferrer" className="text-white hover:text-[var(--color-neon-primary)] font-medium transition-colors">Om Narkhede</a>. All rights reserved.</p>
-                        <p>Built with ♥ for educators worldwide</p>
+                    
+                    <div className="pt-8 border-t border-white/[0.05] flex flex-col md:flex-row items-center justify-between gap-4">
+                        <p className="text-[12px] text-[#666]">
+                            © {new Date().getFullYear()} <a href="https://omnarkhede.tech" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Om Narkhede</a>. All rights reserved.
+                        </p>
+                        <div className="flex items-center gap-2 text-[12px] text-[#666]">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#00e599] animate-pulse" />
+                            All systems operational
+                        </div>
                     </div>
                 </div>
             </footer>

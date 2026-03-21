@@ -31,9 +31,7 @@ export default function DashboardSidebar({ user }: Props) {
             {/* Logo */}
             <div className="px-6 py-5 border-b border-[var(--color-neon-border)]">
                 <Link href="/" className="flex items-center gap-2 group">
-                    <div className="w-8 h-8 rounded-lg bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.4)] group-hover:shadow-[0_0_20px_rgba(0,229,153,0.6)] transition-all">
-                        <div className="w-3 h-3 bg-black rounded-sm rotate-45" />
-                    </div>
+                    <img src="/vuralogo.png" alt="Vura Logo" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
                     <span className="text-lg font-black tracking-widest uppercase text-white">VURA</span>
                 </Link>
             </div>
