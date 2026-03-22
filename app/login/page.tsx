@@ -5,6 +5,7 @@ import { LogIn, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Image from "next/image";
 
 function LoginContent() {
     const router = useRouter();
@@ -43,9 +44,7 @@ function LoginContent() {
 
             <div className="w-full max-w-md glass-card p-10 flex flex-col items-center text-center relative z-10 shadow-2xl">
                 <Link href="/" className="text-[var(--color-neon-primary)] font-bold text-2xl mb-8 tracking-widest uppercase flex items-center gap-2 hover:opacity-80 transition-opacity">
-                    <div className="w-8 h-8 rounded-lg bg-[var(--color-neon-primary)] flex items-center justify-center">
-                        <div className="w-3 h-3 bg-black rounded-sm rotate-45 transform"></div>
-                    </div>
+                    <Image src="/vuralogo.png" alt="Vura Logo" width={32} height={32} className="rounded-lg object-contain" />
                     Vura
                 </Link>
 

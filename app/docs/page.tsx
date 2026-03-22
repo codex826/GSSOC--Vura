@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import {
     ShieldCheck, Copy, Check, Terminal, Globe,
     AlertTriangle, CheckCircle2, XCircle, ArrowRight,
@@ -248,9 +249,7 @@ export default function DocsPage() {
             <header className="sticky top-0 z-50 border-b border-[var(--color-neon-border)] bg-[rgba(3,3,3,0.85)] backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.4)] group-hover:shadow-[0_0_20px_rgba(0,229,153,0.6)] transition-all">
-                            <div className="w-3 h-3 bg-black rounded-sm rotate-45" />
-                        </div>
+                        <Image src="/vuralogo.png" alt="Vura Logo" width={32} height={32} className="rounded-lg object-contain shadow-[0_0_12px_rgba(0,229,153,0.4)] group-hover:shadow-[0_0_20px_rgba(0,229,153,0.6)] transition-all" />
                         <span className="text-xl font-black tracking-widest uppercase text-white">VURA</span>
                     </Link>
                     <nav className="flex items-center gap-6 text-sm text-[var(--color-neon-muted)]">
