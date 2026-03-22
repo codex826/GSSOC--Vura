@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma"
 import { CheckCircle2, XCircle, ExternalLink, Calendar, GraduationCap, User, ShieldCheck, Hash } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 export default async function VerifyPage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
@@ -21,9 +22,7 @@ export default async function VerifyPage(props: { params: Promise<{ id: string }
                     {/* Header brand */}
                     <div className="flex justify-center mb-8">
                         <Link href="/" className="flex items-center gap-2 group">
-                            <div className="w-8 h-8 rounded-lg bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.4)]">
-                                <div className="w-3 h-3 bg-black rounded-sm rotate-45" />
-                            </div>
+                            <Image src="/vuralogo.png" alt="Vura Logo" width={32} height={32} className="rounded-lg object-contain shadow-[0_0_12px_rgba(0,229,153,0.4)]" />
                             <span className="text-xl font-black tracking-widest uppercase text-white">VURA</span>
                         </Link>
                     </div>
@@ -70,9 +69,7 @@ export default async function VerifyPage(props: { params: Promise<{ id: string }
                 {/* Header brand */}
                 <div className="flex justify-center mb-8">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--color-neon-primary)] flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.4)] group-hover:shadow-[0_0_22px_rgba(0,229,153,0.6)] transition-all">
-                            <div className="w-3 h-3 bg-black rounded-sm rotate-45" />
-                        </div>
+                        <Image src="/vuralogo.png" alt="Vura Logo" width={32} height={32} className="rounded-lg object-contain shadow-[0_0_12px_rgba(0,229,153,0.4)] group-hover:shadow-[0_0_22px_rgba(0,229,153,0.6)] transition-all" />
                         <span className="text-xl font-black tracking-widest uppercase text-white">VURA</span>
                     </Link>
                 </div>

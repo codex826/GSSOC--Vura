@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FileUp, FileSpreadsheet, Loader2, CheckCircle, AlertCircle, Crosshair, LayoutDashboard, LogOut } from "lucide-react";
+import { FileUp, FileSpreadsheet, Loader2, CheckCircle, AlertCircle, Crosshair, LayoutDashboard, LogOut, Home } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 import dynamic from 'next/dynamic';
 
@@ -141,12 +142,13 @@ export default function Dashboard() {
             {/* Header Navbar Layer */}
             <div className="w-full max-w-6xl mb-6 flex items-center justify-between relative z-20">
                 <Link href="/" className="text-xl font-black tracking-widest uppercase flex items-center gap-2 text-white">
-                    <div className="w-6 h-6 rounded-md bg-[var(--color-neon-primary)] flex items-center justify-center">
-                        <div className="w-2 h-2 bg-black rounded-sm rotate-45 transform"></div>
-                    </div>
+                    <Image src="/vuralogo.png" alt="Vura Logo" width={32} height={32} className="rounded-lg object-contain" />
                     VURA
                 </Link>
                 <div className="flex gap-4 items-center">
+                    <Link href="/" className="btn-secondary py-2 px-4 flex items-center gap-2 text-sm">
+                        <Home className="w-4 h-4" /> Home
+                    </Link>
                     <Link href="/dashboard" className="btn-secondary py-2 px-4 flex items-center gap-2 text-sm">
                         <LayoutDashboard className="w-4 h-4" /> Gallery
                     </Link>
