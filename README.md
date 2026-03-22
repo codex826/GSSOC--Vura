@@ -23,6 +23,9 @@ Vura is a production-ready certificate automation platform built for event organ
 
 ---
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8b8ed7c1-90a7-4b2b-8b3b-2bc59175de24" />
+
+
 ## Features
 
 - **Bulk Generation** — Upload participant data via Excel (.xlsx) and map it to any PDF template. Generate hundreds of certificates in a single operation.
