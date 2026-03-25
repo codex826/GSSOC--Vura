@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FileUp, FileSpreadsheet, Loader2, CheckCircle, AlertCircle, Crosshair, LayoutDashboard, LogOut, Home, Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { FileUp, FileSpreadsheet, Loader2, CheckCircle, AlertCircle, Crosshair, LayoutDashboard, LogOut, Home, Github, Twitter, Linkedin, Mail, Download } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import JSZip from "jszip";
 
 import dynamic from 'next/dynamic';
 
@@ -26,6 +27,7 @@ export default function Dashboard() {
     const [error, setError] = useState<string | null>(null);
     const [successCount, setSuccessCount] = useState<number | null>(null);
     const [saveToDb, setSaveToDb] = useState(true);
+    const [isZipping, setIsZipping] = useState(false);
 
     type Certificate = {
         certificateId: string;
@@ -134,6 +136,48 @@ export default function Dashboard() {
             setError(err instanceof Error ? err.message : "An unexpected error occurred.");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDownloadZip = async () => {
+        setIsZipping(true);
+        try {
+            const zip = new JSZip();
+            
+            const fetchPromises = certificates.map(async (cert) => {
+                const safeName = cert.name.replace(/[^a-zA-Z0-9]/g, '_');
+                const fileName = `${safeName}_${cert.certificateId}.pdf`;
+
+                if (cert.pdfUrl.startsWith('data:application/pdf;base64,')) {
+                    const base64Data = cert.pdfUrl.replace('data:application/pdf;base64,', '');
+                    zip.file(fileName, base64Data, { base64: true });
+                } else {
+                    // Try fetch S3 URL
+                    try {
+                        const response = await fetch(cert.pdfUrl);
+                        const blob = await response.blob();
+                        zip.file(fileName, blob);
+                    } catch (err) {
+                        console.error(`Failed to fetch ${cert.pdfUrl}`, err);
+                    }
+                }
+            });
+
+            await Promise.all(fetchPromises);
+            const zipContent = await zip.generateAsync({ type: 'blob' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(zipContent);
+            link.download = `Vura_Certificates_${Date.now()}.zip`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        } catch (err) {
+            console.error(err);
+            setError("Failed to create ZIP archive.");
+        } finally {
+            setIsZipping(false);
         }
     };
 
@@ -506,6 +550,17 @@ export default function Dashboard() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                    
+                    <div className="mt-10 flex justify-center">
+                        <button 
+                            onClick={handleDownloadZip} 
+                            disabled={isZipping}
+                            className="bg-[var(--color-neon-primary)] text-black font-semibold hover:bg-[#00ffaa] py-3 px-8 rounded-xl flex items-center justify-center gap-3 group transition-all duration-300 disabled:opacity-50 shadow-[0_0_20px_rgba(0,229,153,0.3)] hover:shadow-[0_0_30px_rgba(0,229,153,0.5)]"
+                        >
+                            {isZipping ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />}
+                            {isZipping ? "Creating ZIP Archive..." : "Download All as ZIP"}
+                        </button>
                     </div>
                 </div>
             )}
